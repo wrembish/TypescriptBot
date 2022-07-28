@@ -1,0 +1,22 @@
+{
+  "name": "typescriptbot",
+  "version": "1.0.0",
+  "description": "Trying to code a discord bot in Typescript",
+  "main": "index.ts",
+  "scripts": {
+    "prestart": "ts-node src/deploy-commands.ts",
+    "start": "ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Wiliam Rembish",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/builders": "^1.0.0",
+    "@discordjs/rest": "^1.0.0",
+    "discord-api-types": "^0.36.3",
+    "discord.js": "^14.0.3",
+    "dotenv": "^16.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4"
+  }
+}
