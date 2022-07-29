@@ -1,18 +1,22 @@
 import { Collection, Interaction } from "discord.js"
+import Command from "../classes/Command"
+import Event__c from "../classes/Event__c"
 
-module.exports = {
-    name : 'interactionCreate',
-    async execute(interaction : Interaction, commands : Collection<string, any>) : Promise<void> {
+export const event : Event__c = new Event__c(
+    'interactionCreate',
+    false,
+    async (interaction : Interaction, commands : Collection<string, Command>) : Promise<void> => {
         if((interaction.type !== 2)) return
+        
 
-        const command : any = commands.get(interaction.commandName)
-    
-        if(!command) return
+        const command : Command | undefined = commands.get(interaction.commandName)
 
-        try {
-            await command.execute(interaction)
-        } catch(error) {
-            await interaction.reply({ content : 'There was an error while executing this command!', ephemeral : true })
+        if(command) {
+            try {
+                await command.execute(interaction)
+            } catch(error : any) {
+                await interaction.reply({ content : 'There was an error while executing this command!', ephemeral : true })
+            }
         }
-    },
-}
+    }
+)

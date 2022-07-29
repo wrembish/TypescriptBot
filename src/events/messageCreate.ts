@@ -1,21 +1,22 @@
 import { Collection, Message } from "discord.js"
-import sfAuth from "src/classes/sfAuth"
+import Command from "../classes/Command"
+import sfAuth from "../classes/sfAuth"
+import Event__c from "../classes/Event__c"
 
-module.exports = {
-    name : 'messageCreate',
-    async execute(message : Message, commands : Collection<string, any>, _sf : sfAuth) : Promise<void> {
+export const event : Event__c = new Event__c (
+    'messageCreate',
+    false,
+    async (message : Message, commands : Collection<string, Command>, _sf : sfAuth) : Promise<void> => {
         if(message.client.user && message.author.id === message.client.user.id) return
 
         const content : string = message.content
 
-        if(content == 'ping') {
+        if(content == 'ping' && commands.size > 0) {
             await message.channel.send('Pong!')
-        }
-
-        if(content == 'list slash') {
+        } else if(content == 'list slash') {
             let reply : string = ''
-            commands.each((_value : any, key : string) : void => { reply += '/' + key + '\n' })
+            commands.each((command) : void => { reply += `/${command.data.name} : ${command.data.description}\n` })
             await message.channel.send(reply)
         }
-    },
-}
+    }
+)
