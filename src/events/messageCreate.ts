@@ -15,7 +15,7 @@ export const event : Event__c = new Event__c (
             await message.channel.send('Pong!')
         } else if(content == 'list slash') {
             let reply : string = ''
-            commands.each((command) : void => { reply += `/${command.data.name} : ${command.data.description}\n` })
+            commands.each((command : Command) : void => { reply += `/${command.data.name} : ${command.data.description}\n` })
             await message.channel.send(reply)
         }
     }
