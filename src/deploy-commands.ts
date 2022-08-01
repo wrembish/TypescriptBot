@@ -1,9 +1,10 @@
 require('dotenv').config()
 import * as fs from 'node:fs'
 import * as path from 'node:path'
-import { REST } from '@discordjs/rest'
 import { RESTPostAPIApplicationCommandsJSONBody, Routes } from 'discord-api-types/v10'
 import Command from './classes/Command'
+import { REST } from 'discord.js'
+
 
 const commands : RESTPostAPIApplicationCommandsJSONBody[] = []
 const commandsPath : fs.PathLike = path.join(__dirname, 'commands')
@@ -16,7 +17,7 @@ for(const file of commandFiles) {
 }
 if(process.env.TOKEN && process.env.CLIENT_ID && process.env.GUILD_ID) {
     const rest : REST = new REST({ version : '10' }).setToken(process.env.TOKEN)
-    
+
     rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
                                             { body : commands })
         .then(() : void => console.log('Successfully registered application commands.'))
