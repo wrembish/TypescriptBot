@@ -1,4 +1,4 @@
-import { ModalSubmitInteraction } from "discord.js"
+import { ModalSubmitInteraction } from 'discord.js'
 import Command from '../classes/Command'
 
 export const command : Command = new Command(

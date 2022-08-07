@@ -23,5 +23,5 @@ if(process.env.TOKEN && process.env.CLIENT_ID && process.env.GUILD_ID) {
         .then(() : void => console.log('Successfully registered application commands.'))
         .catch((error : any) : void => console.error('Error: ', error))
 } else {
-    console.error('Missing the Client Id or Guild Id environment variable')
+    console.error('Missing the Token, Client Id, or Guild Id environment variable')
 }

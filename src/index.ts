@@ -33,9 +33,12 @@ for(const file of eventFiles) {
     if(event.once) {
         client.once(event.name, (...args) => event.execute(...args))
     } else {
-        client.on(event.name, (...args) => event.execute(...args, commands, sf))
+        client.on(event.name, (...args) => event.execute(...args))
     }
 }
 
 // Login to Discord with the Client Token
 client.login(process.env.TOKEN)
+
+export const salesforce : sfAuth = sf
+export const COMMANDS : Collection<string, Command> = commands

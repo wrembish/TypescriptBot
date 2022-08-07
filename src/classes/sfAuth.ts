@@ -9,9 +9,10 @@ export default class sfAuth {
     constructor() { this.auth() }
 
     public async checkAuth() : Promise<void> {
-        await this.query('SELECT+Id+from+Lead+LIMIT+1')
-            .then((response : any) : boolean => !response.totalSize )
-            .then(async (reAuth : boolean) : Promise<void> => { if(reAuth) await this.auth() })
+        const response : any = await this.query('SELECT+Id+from+Lead+LIMIT+1')
+        if((response && !response.totalSize) || !response) {
+            await this.auth()
+        }
     }
 
     public async auth() : Promise<void> {
@@ -46,7 +47,7 @@ export default class sfAuth {
                 'Content-Type'  : 'application/json',
                 'Authorization' : `${this.token_type} ${this.access_token}`
             }
-        })  .then((response : Response) : any => { response.json() })
+        })  .then((response : Response) : any => response.json())
             .then((data : any) : void => { result = data })
             .catch((error : any) : void => {
                 console.error('Error: ', error)
@@ -63,7 +64,7 @@ export default class sfAuth {
                 'Authorization' : `${this.token_type} ${this.access_token}`
             },
             body    : JSON.stringify(body)
-        })  .then((response : Response) : any => { response.json() })
+        })  .then((response : Response) : any => response.json())
             .then((data : any) : void => { result = data })
             .catch((error : any) : void => { console.error('Error: ', error) })
         return result
@@ -92,7 +93,7 @@ export default class sfAuth {
                 'Authorization' : `${this.token_type} ${this.access_token}`
             },
             body    : JSON.stringify(body)
-        })  .then((response : Response) => { response.json() })
+        })  .then((response : Response) => response.json())
             .then((data : any) => { result = data })
             .catch((error : any) => { console.error('Error: ', error) })
         return result
@@ -118,9 +119,36 @@ export default class sfAuth {
                 'Content-Type'  : 'application/json',
                 'Authorization' : `${this.token_type} ${this.access_token}`
             }
-        })  .then((response : Response) : any => { response.json() })
+        })  .then((response : Response) : any => response.json())
             .then((data : any) : void => { result = data })
             .catch((error : any) => { console.error('Error: ', error) })
         return result
+    }
+
+    public async doPost(endpoint : string, body : any) : Promise<any> {
+        let result : any
+        await fetch(`${this.instance_url}/${endpoint}`, {
+            method  : 'POST',
+            headers : {
+                'Content-Type'  : 'application/json',
+                'Authorization' : `${this.token_type} ${this.access_token}`
+            },
+            body    : JSON.stringify(body)
+        })  .then(async (response : Response) : Promise<any> => response.json())
+            .then((data : any) : void => { result = data })
+            .catch((error : any) : void => { console.error('Error: ', error) })
+
+        return result
+    }
+
+    public async doGet(endpoint : string) : Promise<void> {
+        await fetch(`${this.instance_url}/${endpoint}`, {
+            method  : 'GET',
+            headers : {
+                'Content-Type'  : 'application/json',
+                'Authorization' : `${this.token_type} ${this.access_token}`
+            }
+        })  .then((response : Response) : any => response.json())
+            .then((data : any) : void => { console.log(data) })
     }
 }
